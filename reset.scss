@@ -1,0 +1,30 @@
+@import url(https://assets.fidelity.com/vendor/providence/fonts.css);
+
+body {
+    font-size: 16px;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .container {
+        width: 800px;
+        padding: 1rem;
+        display: flex;
+        gap: 2rem;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+
+    &:before, &:after {
+        display: flex;
+    }
+}

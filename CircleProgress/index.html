@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Circle Progress</title>
+    <link rel="stylesheet" href="../reset.css">
+    <style>
+        .circle-container {
+            box-sizing: content-box;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 25px solid green;
+            border-left: 25px solid #ebebeb;
+            border-top: 25px solid #ebebeb;
+            position: relative;
+            transform: rotate(-45deg);
+
+            &:before {
+                width: 70%;
+                height: 70%;
+                display: flex;
+                border-radius: 50%;
+                content: attr(data-percentage);
+                justify-content: center;
+                align-items: center;
+                font-size: 1rem;
+                position: absolute;
+                top: 15%;
+                left: 15%;
+                z-index: 3;
+                transform: rotate(45deg);
+            }
+
+            &:after {
+                width: 100%;
+                height: 100%;
+                border-radius: 50%;
+                border: 25px solid transparent;
+                content: "";
+                border-left: 25px solid #ebebeb;
+                border-top: 25px solid #ebebeb;
+                content: "";
+                display: flex;
+                position: absolute;
+                z-index: 2;
+                transform: translateX(-25px) translateY(-25px) rotate(-50deg);
+            }
+
+            &.more:after {
+                border-left: 25px solid green;
+                border-top: 25px solid green;
+                transform: translateX(-25px) translateY(-25px) rotate(-110deg);
+            }
+        }
+
+        .shell {
+            margin-left: 2rem;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            box-shadow: inset 0 0 3px #ebebeb;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            transform: scale(2);
+
+            .bar {
+                width: 44px;
+                height: 44px;
+                border-radius: 50%;
+                border: 4px solid transparent;
+                border-top: 4px solid green;
+                transform: rotate(45deg);
+                position: relative;
+                transition: transform .4s linear;
+
+                &:before {
+                    content: "";
+                    position: absolute;
+                    border: 4px solid transparent;
+                    border-left: 4px solid rgba(0,0,0,0);
+                    border-right: 4px solid rgba(0,0,0,0);
+                    border-bottom: 4px solid green;
+                    transform: rotate(135deg);
+                    top: 2.6px;
+                    right: -2.8px;
+                    z-index: 999;
+                }
+            }
+
+            .blocker {
+                position: absolute;
+                width: 45px;
+                height: 45px;
+                border-radius: 50%;
+                transform: rotate(45deg);
+                overflow:hidden;
+                border-top: 6px solid #fff;
+                border-left: 6px solid #fff;
+                border-bottom: 6px solid #fff;
+                border: none;
+
+                &:before {
+                    content: "";
+                    width: 90px;
+                    height: 90px;
+                    position: absolute;
+                    left: -22.5px;
+                    top: -22.5px;
+                    background-color: #fff;
+                    clip-path: polygon(50% 50%, 100% 50%, 100% 0, 50% 0);
+                    transform: rotate(-45deg);
+                    transition: all .2s linear;
+                }
+            }
+
+            .center {
+                position: absolute;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 3;
+                width: 100%;
+                height: 100%;
+                font-size: 18px;
+                color: green;
+      
+                &:before {
+                    content: "";
+                    width: 16px;
+                    display: none;
+                    height: 12px;
+                    position: relative;
+                    top: -3px;
+                    transform: rotate(-45deg);
+                    border-left: 2px solid green;
+                    border-bottom: 2px solid green;
+                }
+            }
+
+            &[data-step="1"]{
+                .bar {
+                    transform: rotate(135deg);
+                }
+            }
+
+            &[data-step="2"]{
+                .bar {
+                    transform: rotate(225deg);
+                    border-top: 4px solid green;
+                    border-left: 4px solid green;
+                }
+            }
+
+            &[data-step="3"]{
+                .bar {
+                    transform: rotate(315deg);
+                    border-top: 4px solid green;
+                    border-left: 4px solid green;
+                    border-bottom: 4px solid green;
+                }
+
+                .blocker {
+                    &:before {
+                        clip-path: polygon(50% 50%, 100% 50%, 100% 0, 79% 0);
+                    }
+                }
+            }
+
+            &[data-step="4"]{
+                .bar {
+                    transform: rotate(405deg);
+                    border: 4px solid green;
+                    &:before {
+                        display: none;
+                    }
+                }
+                .blocker {
+                    &:before {
+                        clip-path: polygon(50% 50%, 100% 50%, 100% 0, 100% 50%);
+                    }
+                }
+
+                .center:before {
+                    display: block;
+                }
+ 
+            }
+
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="circle-container more" data-percentage="70%"></div>
+
+        <div class="circle-container less" data-percentage="40%"></div>
+
+        <div class="shell" data-step="0">
+            <div class="bar"></div>
+            <div class="blocker"></div>
+            <div class="center">1</div>
+        </div>
+    </div>
+
+    <script>
+        let i = 0;
+
+        document.body.addEventListener('click', e => {
+            document.querySelector('.shell').setAttribute('data-step', ++i);
+            document.querySelector('.center').innerHTML = i + 1;
+            if (i ==4) {
+                document.querySelector('.center').innerHTML = '';
+            }
+        })
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carousel</title>
+    <link rel="stylesheet" href="../reset.css">
+    <style>
+        body {
+            &.rotate {
+                width: 100vmin;
+                height: 100vmax;
+
+                .rotate-container {
+                    width: 100vh;
+                    height: 100vw;
+                    transform: rotate(90deg);
+                    transform-origin: center;
+                    position: fixed;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    background-color: yellowgreen;
+                    z-index: 1;
+                }
+            }
+            .rotate-container {
+                background-color: darkgrey;
+                width: 100%;
+                height: 50%;
+                font-size: 3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="rotate-container" style="font-size: 3rem;">
+        Hello World
+    </div>
+
+    <script>
+        document.body.addEventListener('click', e=>{
+            document.body.classList.toggle('rotate');
+        });
+    </script>
+</body>
+</html>

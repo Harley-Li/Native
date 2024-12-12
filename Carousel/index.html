@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carousel</title>
+    <link rel="stylesheet" href="../reset.css">
+    <style>
+        .carousel-container {
+            width: 100%;
+            height: 200px;
+            display: flex;
+            overflow: hidden;
+            position: relative;
+            justify-content: center;
+        
+            li {
+                position: absolute;
+                top: 0;
+                left: 0;
+                z-index: 1;
+                list-style: none;
+                width: 280px;
+                height: 100%;
+                border-radius: .5rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: transform .4s ease-in-out;
+                border: 1px solid #ccc;
+                opacity: .8;
+                background-color: #ccc;
+
+                &:first-child {
+                    transform: scale(.66) translateX(-25%);
+                }
+
+                &:nth-child(2){
+                    transform: scale(.83) translateX(28%);
+                    z-index: 2;
+                }
+
+                &:nth-child(3){
+                    transform: scale(1) translateX(88%);
+                    z-index: 3;
+                    background-color: #fff;
+                    opacity: 1;
+                }
+                &:nth-child(4){
+                    transform: scale(.83) translateX(181%);
+                    z-index: 2;
+                }
+                &:nth-child(5){
+                    transform: scale(.66) translateX(289%);
+                    z-index: 1;
+                }
+                &:nth-child(n+6){
+                    display: none;
+                }
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="carousel-container">
+            <li><div>1</div></li>
+            <li><div>2</div></li>
+            <li><div>3</div></li>
+            <li><div>4</div></li>
+            <li><div>5</div></li>
+            <li><div>6</div></li>
+            <li><div>7</div></li>
+        </div>
+    </div>
+
+    <script>
+        setInterval(() => {
+            let item = document.querySelector('li');
+            let container = document.querySelector('.carousel-container');
+            container.append(item);
+        }, 2000);
+    </script>
+</body>
+</html>
