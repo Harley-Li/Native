@@ -1,0 +1,597 @@
+:host {
+    --input-value-color: #141414;
+    --input-border: #abaaa8;
+    --background-color: #fff;
+    --interactive-color: #368727;
+    --secondary-color: #999;
+    --revert-color: #fff;
+    --arrow-color: var(--interactive-color);
+
+    * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+        font-family: "Fidelity Sans";
+        user-select: none;
+        color: var(--input-value-color);
+
+        .sr-only {
+            position: absolute;
+            left: -999rem;
+            z-index: -999;
+        }
+    }
+
+    a {
+        text-decoration: none;
+        color: var(--interactive-color);
+    }
+}
+
+@mixin flexCenter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@mixin flexBetween {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dt-picker-widget {
+    position: relative;
+
+    &.active {
+        .calendar-box {
+            outline: 1px solid var(--interactive-color);
+            border-color: var(--interactive-color);
+        }
+    }
+
+    &.show {
+        .container {
+            display: block;
+        }
+
+        .year-month-picker {
+            display: flex;
+        }
+    }
+
+    .date-input-area {
+        height: 2.25rem;
+        display: inline-flex;
+        gap: 1rem;
+        align-items: center;
+
+        & > span {
+            display: none;
+        }
+
+        .calendar-box {
+            width: 10.5rem;
+            height: 2.25rem;
+            border: 1px solid var(--input-border);
+            border-radius: 0.5rem;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 0.5rem 1rem 0.5rem 0.75rem;
+            background-color: var(--background-color);
+            color: var(--input-value-color);
+            position: relative;
+
+            input[type="number"] {
+                border: none;
+                color: var(--input-value-color);
+                border-radius: 0;
+                text-align: center;
+                vertical-align: middle;
+                width: 1.8rem;
+                height: 1.25rem;
+                line-height: 1.125rem;
+                font-size: 1rem;
+                user-select: none;
+
+                &:focus,
+                &:focus-visible,
+                &:active {
+                    outline: none;
+                    background-color: var(--interactive-color);
+                    color: transparent;
+                    text-shadow: 0 0 0 var(--background-color);
+                    border-radius: 3px;
+
+                    &::placeholder {
+                        color: var(--revert-color);
+                    }
+                }
+
+                &::-webkit-inner-spin-button {
+                    display: none;
+                }
+
+                &::placeholder {
+                    font-size: 0.875rem;
+                    color: var(--input-value-color);
+                }
+
+                &.year {
+                    width: 2.5rem;
+                }
+            }
+
+            & > a {
+                width: 1.5rem;
+                height: 1.5rem;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                position: absolute;
+                right: 0.75rem;
+            }
+        }
+    }
+
+    .year-month-picker {
+        display: none;
+        width: 11.5rem;
+        height: 3rem;
+        padding-top: 1.125rem;
+        padding-left: 1.25rem;
+        position: absolute;
+        z-index: 2;
+        backdrop-filter: blur(0px);
+        transition: backdrop-filter 0.4s linear;
+
+        .drawer-btn {
+            background-color: var(--background-color);
+            border: none;
+            width: 9rem;
+            position: relative;
+            display: flex;
+            align-items: center;
+            height: 1.25rem;
+            justify-content: flex-start;
+            cursor: pointer;
+
+            .year-month {
+                width: 7.8125rem;
+                font-size: 1rem;
+                text-align: left;
+
+                span {
+                    margin-right: 0.125rem;
+                }
+            }
+
+            &:focus,
+            &:focus-visible {
+                box-shadow: 0 0 0 2px var(--interactive-color);
+                outline: none;
+                border-radius: 3px;
+            }
+
+            .picker-arrow {
+                border: 0.3125rem solid transparent;
+                border-top: 0.375rem solid var(--interactive-color);
+                position: absolute;
+                top: 0.45rem;
+                right: 0;
+            }
+        }
+
+        .close-drawer {
+            width: 1.5rem;
+            height: 1.5rem;
+            position: absolute;
+            right: 0.5rem;
+            top: 1.125rem;
+            @include flexCenter();
+            display: none;
+
+            &:before,
+            &:after {
+                display: block;
+                content: "";
+                height: 1.2rem;
+                width: 0;
+                border-left: 1px solid var(--interactive-color);
+                position: absolute;
+                top: 0;
+                left: 0.5rem;
+                transform: rotate(45deg);
+            }
+
+            &:after {
+                transform: rotate(-45deg);
+            }
+        }
+
+        .dropdown-drawer {
+            background-color: var(--background-color);
+            border-radius: 0.5rem;
+            display: none;
+            flex-direction: column;
+            min-height: 248px;
+            min-width: 367px;
+            overflow-y: auto;
+            padding-left: 0.5rem;
+            position: absolute;
+            top: 3rem;
+            left: 0.25rem;
+            width: fit-content;
+            z-index: 2;
+
+            .year-options,
+            .month-options {
+                width: 351px;
+                min-height: 256px;
+                max-height: 256px;
+                overflow-y: auto;
+                display: flex;
+                flex-wrap: wrap;
+                padding: 0.5rem 0.25rem 1rem 0.5rem;
+                gap: 1px 0;
+
+                &::-webkit-scrollbar {
+                    display: none;
+                }
+
+                &::-webkit-scrollbar-track {
+                    width: 0;
+                }
+
+                input[type="radio"] {
+                    appearance: none;
+                    font-size: 0.875rem;
+                    height: 2.25rem;
+                    width: 4rem;
+                    border-radius: 1.125rem;
+                    position: relative;
+                    @include flexCenter();
+                    gap: 0.75rem;
+                    color: var(--input-value-color);
+                    margin-right: 0.25rem;
+                    cursor: pointer;
+
+                    &:before {
+                        display: block;
+                        content: attr(aria-label);
+                    }
+
+                    &:nth-child(5n) {
+                        margin-right: 0;
+                    }
+
+                    &:checked,
+                    &.active {
+                        outline: none;
+                        color: var(--revert-color);
+                        background-color: var(--interactive-color);
+                    }
+
+                    &.current {
+                        border: 1px solid var(--interactive-color);
+                        color: var(--interactive-color);
+                        background-color: var(--background-color);
+
+                        &:checked {
+                            border: none;
+                            color: var(--revert-color);
+                            background-color: var(--interactive-color);
+                        }
+                    }
+                }
+
+                &.scroll-shadows {
+                    max-height: 200px;
+                    overflow: auto;
+                    -webkit-overflow-scrolling: touch;
+                    background:
+                        linear-gradient(#fff 30%, rgba(255, 255, 255, 0)) center top,
+                        linear-gradient(rgba(255, 255, 255, 0), #fff 70%) center bottom,
+                        radial-gradient(farthest-side at 50% 0, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0)) center top,
+                        radial-gradient(farthest-side at 50% 100%, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0)) center bottom;
+
+                    background-repeat: no-repeat;
+                    background-size:
+                        100% 40px,
+                        100% 40px,
+                        100% 14px,
+                        100% 14px;
+                    background-attachment: local, local, scroll, scroll;
+                }
+            }
+
+            .month-options {
+                height: 82px;
+                min-height: unset;
+                padding: 0.5rem 0;
+                flex-wrap: wrap;
+                border-bottom: 0.5px solid var(--input-border);
+                gap: unset;
+
+                input[type="radio"] {
+                    width: 3.25rem;
+                    height: 2rem;
+                    border-radius: 1rem;
+
+                    &:nth-child(5n) {
+                        margin-right: 0.25rem;
+                    }
+
+                    &:nth-child(6n) {
+                        margin-right: 0;
+                    }
+                }
+            }
+        }
+
+        &.expanded {
+            border-radius: 0.75rem;
+            background-color: rgba($color: #000000, $alpha: 0.7);
+            backdrop-filter: blur(10px);
+            width: 375px;
+            height: 400px;
+            margin-top: 0.25rem;
+            z-index: 3;
+
+            .drawer-btn {
+                background-color: transparent;
+
+                .year-month,
+                .mode {
+                    color: var(--revert-color);
+
+                    span {
+                        color: var(--revert-color);
+                    }
+                }
+
+                .picker-arrow {
+                    top: 0.125rem;
+                    border: 0.3125rem solid transparent;
+                    border-bottom: 0.37rem solid var(--interactive-color);
+                }
+            }
+
+            .dropdown-drawer,
+            .close-drawer {
+                display: flex;
+            }
+        }
+    }
+
+    .container {
+        width: 23.4375rem;
+        padding: 0.25rem 0.75rem;
+        background-color: var(--background-color);
+        border-radius: 0.75rem;
+        box-shadow: 0 1px 0.375rem 0 rgba(32, 33, 36, 0.4);
+        position: fixed;
+        top: var(--top);
+        left: var(--left);
+        display: none;
+
+        .data-picker-header {
+            height: 2.25rem;
+            @include flexBetween();
+            position: relative;
+            padding: 0.25rem 1rem 0 0.625rem;
+            align-items: center;
+
+            .month-picker {
+                position: absolute;
+                right: 1rem;
+                width: 4rem;
+                @include flexBetween();
+
+                .left,
+                .right {
+                    width: 1.5rem;
+                    height: 1.5rem;
+                    @include flexCenter();
+                    position: relative;
+                    overflow: hidden;
+
+                    &:focus,
+                    &:focus-visible {
+                        box-shadow: 0 0 0 0.125rem var(--interactive-color);
+                        outline: none;
+                        border-radius: 3px;
+                    }
+
+                    &:before {
+                        content: "";
+                        display: block;
+                        border-top: 0.125rem solid var(--arrow-color);
+                        border-left: 0.125rem solid var(--arrow-color);
+                        transform: rotate(45deg);
+                        width: 0.75rem;
+                        height: 0.75rem;
+                        position: relative;
+                        top: 0.125rem;
+                    }
+                }
+
+                .right {
+                    &:before {
+                        transform: rotate(225deg);
+                    }
+                }
+            }
+        }
+
+        .date-items {
+            position: relative;
+
+            &.header {
+                @include flexBetween;
+                flex-direction: row;
+                margin-top: 1rem;
+
+                & > div {
+                    @include flexCenter;
+                    margin: 0.25rem;
+                    width: 2.5rem;
+                    height: 2.5rem;
+                    border-radius: 50%;
+                    color: var(--input-value-color) !important;
+                    background-color: var(--background-color);
+                    font-size: 1rem;
+                    position: static;
+                }
+            }
+
+            &.body {
+                height: 18rem;
+                overflow: hidden;
+
+                & > div {
+                    @include flexBetween();
+                    flex-wrap: wrap;
+                    position: absolute;
+                    background-color: var(--background-color);
+                    transition: all 0.4s linear;
+                    height: 18rem;
+
+                    &:first-child {
+                        top: -18rem;
+                    }
+
+                    &:nth-child(2) {
+                        top: 0;
+                    }
+
+                    &:last-child {
+                        top: 18rem;
+                    }
+
+                    & > * {
+                        margin: 0.25rem;
+                        width: 2.5rem;
+                        height: 2.5rem;
+                        border-radius: 50%;
+                        color: var(--input-value-color) !important;
+                        background-color: var(--background-color);
+                        @include flexCenter();
+                        font-size: 1rem;
+
+                        &.preMonth,
+                        &.nextMonth {
+                            & > span {
+                                color: var(--secondary-color) !important;
+                            }
+                        }
+
+                        &.active {
+                            background-color: var(--interactive-color);
+                            & > span {
+                                color: var(--revert-color) !important;
+                            }
+                        }
+
+                        &.current {
+                            border: 1px solid var(--interactive-color);
+
+                            & > span {
+                                color: var(--interactive-color);
+                            }
+
+                            &.active {
+                                background-color: var(--interactive-color);
+                                border: none;
+
+                                span {
+                                    color: var(--revert-color) !important;
+                                }
+                            }
+                        }
+
+                        &:focus,
+                        &:focus-visible {
+                            box-shadow: 0 0 0.25rem 0 var(--interactive-color);
+                            outline: none;
+                        }
+                    }
+                }
+            }
+        }
+
+        .button-container {
+            width: 100%;
+            @include flexBetween();
+            padding: 0 0.5rem;
+            margin-bottom: 0.75rem;
+            margin-top: 1rem;
+            font-weight: 500;
+            color: var(--interactive-color) !important;
+
+            & > a {
+                padding: 0.25rem 0.5rem;
+                border-radius: 0.5rem;
+
+                &:focus,
+                &:focus-visible {
+                    box-shadow: 0 0 0.25rem 1px var(--interactive-color);
+                }
+            }
+        }
+    }
+}
+
+.time-selector {
+    width: 10rem;
+    overflow: hidden;
+    position: relative;
+    height: 160px;
+    margin-top: 10rem;
+    display: flex;
+
+    &:before,
+    &:after {
+        width: 100%;
+        height: 0;
+        content: "";
+        display: block;
+        position: absolute;
+        border-top: 1px solid #000;
+        top: 4rem;
+    }
+
+    &:after {
+        top: 6rem;
+    }
+    .time-container {
+        width: 33%;
+        height: 100%;
+        overflow: auto;
+        scroll-snap-type: y mandatory;
+        & > ul {
+            padding-left: 0;
+            &:before {
+                width: 100%;
+                height: 64px;
+                content: "";
+                display: block;
+            }
+            &:after {
+                width: 100%;
+                height: 64px;
+                content: "";
+                display: block;
+            }
+
+            & > li {
+                scroll-snap-align: center;
+                height: 32px;
+                line-height: 32px;
+                text-align: center;
+                list-style: none;
+            }
+        }
+    }
+}

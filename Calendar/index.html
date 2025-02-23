@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="https://assets.fidelity.com/vendor/providence/fonts.css" />
+        <title>Harley's Calculator</title>
+        <style>
+            body {
+                width: 100vw;
+                height: 100vh;
+                overflow: hidden;
+                font-size: 1rem;
+                margin: 6rem;
+                * {
+                    font-family: 'Fidelity Sans', serif, sans-serif;
+                }
+
+                label {
+                    font-size: 1rem;
+                    font-weight: 600;
+                    line-height: 1.3175rem;
+                    display: inline-block;
+                    margin-bottom: 0.5rem;
+                    padding-left: 0.125rem;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <label id="date_label">Calendar</label>
+        <harley-calendar refer-id="date_label" dark-mode="light"></harley-calendar>
+        <script src="./Calendar.js"></script>
+    </body>
+</html>
